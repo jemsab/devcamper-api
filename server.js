@@ -6,6 +6,12 @@ const colors = require('colors')
 const errorHandler = require('./middleware/error')
 const fileupload = require('express-fileupload')
 const cookieParser = require('cookie-parser')
+const helmet = require('helmet')
+const xssClean = require('xss-clean')
+const cors = require('cors')
+const expressRateLimit = require('express-rate-limit')
+const hpp = require('hpp')
+const mongoSanitize = require('express-mongo-sanitize')
 const path = require('path')
 
 // Load env vars
@@ -36,8 +42,31 @@ if (process.env.NODE_ENV == 'development') {
 // File uploading
 app.use(fileupload())
 
+// Sanitize user login information
+app.use(mongoSanitize())
+
+// Set security headers
+app.use(helmet())
+
+// Prevent XSS
+app.use(xssClean())
+
+// Rate limiter
+app.use(
+  expressRateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 100
+  })
+)
+
+// Prevent http param pollution
+app.use(hpp())
+
+// Enable CORS
+app.use(cors())
+
 // Set static folder
-app.use(express.static(path.join(__dirname, 'public')))
+//app.use(express.static(path.join(__dirname, 'public')))
 
 // Mount routers
 app.use('/api/v1/bootcamps', bootcamps)
