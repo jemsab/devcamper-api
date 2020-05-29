@@ -1,3 +1,4 @@
+const compression = require('compression')
 const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
@@ -29,6 +30,7 @@ const reviews = require('./Routes/reviews')
 
 const app = express()
 
+app.use(compression({}))
 //Body parser
 app.use(express.json())
 
@@ -52,12 +54,12 @@ app.use(helmet())
 app.use(xssClean())
 
 // Rate limiter
-app.use(
+/*app.use(
   expressRateLimit({
     windowMs: 10 * 60 * 1000,
     max: 100
   })
-)
+)*/
 
 // Prevent http param pollution
 app.use(hpp())
