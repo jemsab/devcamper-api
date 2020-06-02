@@ -30,7 +30,6 @@ const reviews = require('./Routes/reviews')
 
 const app = express()
 
-app.use(compression({}))
 //Body parser
 app.use(express.json())
 
