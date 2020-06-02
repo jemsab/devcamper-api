@@ -6,8 +6,10 @@ COPY package*.json ./
 
 RUN npm install
 
+RUN npm install pm2
+
 COPY . .
 
 EXPOSE 5000
 
-CMD ["npm", "start"]
+CMD ["npm","start"]
